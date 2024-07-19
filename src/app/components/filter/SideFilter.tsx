@@ -5,7 +5,7 @@ import React from "react";
 
 function SideFilter() {
   return (
-    <div className="flex flex-col">
+    <div className="flex">
       <form className="flex flex-col gap-2 px-5 w-1/4">
         <label htmlFor="sort-by" className="text-xs text-[#6C727F]">
           Sort by
