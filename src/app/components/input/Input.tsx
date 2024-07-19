@@ -6,7 +6,7 @@ function Input({}) {
     <div className="w-1/4 relative">
       <input
         type="text"
-        className="h-[50px] bg-[#282B30] pl-12 rounded-xl text-[#6C727F] text-sm font-medium w-full"
+        className="h-[50px] bg-[#282B30] pl-12 rounded-xl text-[#6C727F] text-xs font-medium w-full"
         placeholder="Search by Name, Region, Subregion"
       />
       <Image
