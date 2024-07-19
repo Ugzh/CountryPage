@@ -43,6 +43,9 @@ function Board({ searchTerm, setEndpoint }: any) {
       };
 
       fetchData();
+    } else if (searchTerm.length === 0) {
+      setEndpoint("https://restcountries.com/v3.1/all");
+      setEndpointBoard("https://restcountries.com/v3.1/all");
     }
   }, [searchTerm, setEndpoint]);
 
