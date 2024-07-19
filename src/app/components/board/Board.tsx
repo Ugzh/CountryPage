@@ -39,16 +39,39 @@ function Board() {
           <tr key={Math.random()}>
             <td>
               <Image
+                // @ts-ignore:
                 src={country.flags.svg}
                 width={50}
                 height={50}
+                // @ts-ignore:
                 alt={country.name.common}
               />
             </td>
-            <td>{country.name.common}</td>
-            <td>{country.population}</td>
-            <td>{country.area}</td>
-            <td>{country.region}</td>
+
+            <td>
+              {
+                // @ts-ignore:
+                country.name.common
+              }
+            </td>
+            <td>
+              {
+                // @ts-ignore:
+                country.population
+              }
+            </td>
+            <td>
+              {
+                // @ts-ignore:
+                country.area
+              }
+            </td>
+            <td>
+              {
+                // @ts-ignore:
+                country.region
+              }
+            </td>
           </tr>
         ))}
       </tbody>
