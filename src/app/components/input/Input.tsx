@@ -1,13 +1,23 @@
+"use client";
+
+import React from "react";
 import SearchLoop from "@/app/assets/img/Search.svg";
 import Image from "next/image";
 
-function Input({}) {
+function Input({ searchTerm, setSearchTerm }: string | any) {
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      setSearchTerm(event.target.value);
+    }
+  };
   return (
     <div className="w-1/4 relative">
       <input
         type="text"
-        className="h-[50px] bg-[#282B30] pl-12 rounded-xl text-[#6C727F] text-xs font-medium w-full"
+        className="h-[50px] bg-[#282B30] pl-12 rounded-xl text-[#D2D5DA] text-xs font-medium w-full"
         placeholder="Search by Name, Region, Subregion"
+        value={searchTerm}
+        onKeyDown={handleKeyPress}
       />
       <Image
         src={SearchLoop}

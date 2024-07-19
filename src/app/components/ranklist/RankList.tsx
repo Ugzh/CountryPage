@@ -9,8 +9,9 @@ import useSWR from "swr";
 
 const ENDPOINT_ALL_COUNTRIES: string = "https://restcountries.com/v3.1/all";
 function RankList() {
-  const { data, error } = useSWR(ENDPOINT_ALL_COUNTRIES, fetcher);
-
+  const { data } = useSWR(ENDPOINT_ALL_COUNTRIES, fetcher);
+  const [searchTerm, setSearchTerm]: string | any = React.useState("");
+  console.log(searchTerm);
   return (
     <div className="bg-[#1B1D1F] border border-[#282B30] rounded-xl h-3/5 w-3/4 flex flex-col -m-24 z-10">
       <div className="flex justify-between text-[#6C727F] w-full h-20 items-center px-6 py-14">
@@ -20,11 +21,11 @@ function RankList() {
             {data?.length} countries
           </h2>
         )}
-        <Input />
+        <Input setSearchTerm={setSearchTerm}>{searchTerm}</Input>
       </div>
       <div className="flex items-start overflow-y-scroll">
         <SideFilter></SideFilter>
-        <Board></Board>
+        <Board searchTerm={searchTerm}></Board>
       </div>
     </div>
   );

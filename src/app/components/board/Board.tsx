@@ -1,17 +1,46 @@
+"use client";
+
 import useSWR from "swr";
 import React from "react";
 import Image from "next/image";
-const ENDPOINT =
-  "https://restcountries.com/v3.1/region/europe?fields=flags,name,population,area,region";
 
-export async function fetcher(endpoint: string) {
-  const response = await fetch(endpoint);
+export const fetcher = async (url: string) => {
+  const response = await fetch(url);
   const json = await response.json();
   return json;
-}
+};
 
-function Board() {
-  const { data, error } = useSWR(ENDPOINT, fetcher);
+function Board({ searchTerm }: any) {
+  const [endpoint, setEndpoint] = React.useState<string | null>(
+    "https://restcountries.com/v3.1/region/europe?fields=flags,name,population,area,regions",
+  );
+
+  React.useEffect(() => {
+    if (searchTerm) {
+      const endpoints = [
+        `https://restcountries.com/v3.1/region/${searchTerm}`,
+        `https://restcountries.com/v3.1/name/${searchTerm}`,
+        `https://restcountries.com/v3.1/subregion/${searchTerm}`,
+      ];
+
+      const fetchData = async () => {
+        for (const url of endpoints) {
+          try {
+            await fetcher(url);
+            setEndpoint(url);
+            return;
+          } catch (error) {
+            console.error(`Failed to fetch from ${url}`, error);
+          }
+        }
+        setEndpoint(null);
+      };
+
+      fetchData();
+    }
+  }, [searchTerm]);
+
+  const { data } = useSWR(endpoint, fetcher);
 
   return (
     <table className="w-full">
@@ -26,7 +55,7 @@ function Board() {
       </thead>
       <tbody className="text-[#D2D5DA]">
         {typeof data !== "undefined" &&
-          data.map(({ flags, name, population, area, region }) => (
+          data.map(({ flags, name, population, area, region }: any) => (
             <tr key={Math.random()}>
               <td>
                 <Image
