@@ -10,37 +10,43 @@ export const fetcher = async (url: string) => {
   return json;
 };
 
-function Board({ searchTerm }: any) {
-  const [endpoint, setEndpoint] = React.useState<string | null>(
-    "https://restcountries.com/v3.1/region/europe?fields=flags,name,population,area,regions",
+function Board({ searchTerm, setEndpoint }: any) {
+  const [endpointBoard, setEndpointBoard] = React.useState<string | null>(
+    "https://restcountries.com/v3.1/all",
   );
 
   React.useEffect(() => {
     if (searchTerm) {
+      const subRegionQuery = `${searchTerm}`.split(" ").join("%");
+
       const endpoints = [
+        `https://restcountries.com/v3.1/subregion/${subRegionQuery}`,
         `https://restcountries.com/v3.1/region/${searchTerm}`,
         `https://restcountries.com/v3.1/name/${searchTerm}`,
-        `https://restcountries.com/v3.1/subregion/${searchTerm}`,
       ];
 
       const fetchData = async () => {
-        for (const url of endpoints) {
+        for (let i = 0; endpoints.length > i; i++) {
           try {
-            await fetcher(url);
-            setEndpoint(url);
-            return;
+            const response = await fetch(endpoints[i]);
+            const data = await response.json();
+            if (data.status !== 404) {
+              console.log(endpoints[i]);
+              setEndpoint(endpoints[i]);
+              return setEndpointBoard(endpoints[i]);
+            }
           } catch (error) {
-            console.error(`Failed to fetch from ${url}`, error);
+            console.error(`Failed to fetch from ${endpoints}`, error);
           }
         }
-        setEndpoint(null);
+        setEndpointBoard("");
       };
 
       fetchData();
     }
-  }, [searchTerm]);
+  }, [searchTerm, setEndpoint]);
 
-  const { data } = useSWR(endpoint, fetcher);
+  const { data } = useSWR(endpointBoard, fetcher);
 
   return (
     <table className="w-full">
@@ -54,7 +60,7 @@ function Board({ searchTerm }: any) {
         </tr>
       </thead>
       <tbody className="text-[#D2D5DA]">
-        {typeof data !== "undefined" &&
+        {Array.isArray(data) ? (
           data.map(({ flags, name, population, area, region }: any) => (
             <tr key={Math.random()}>
               <td>
@@ -63,7 +69,7 @@ function Board({ searchTerm }: any) {
                   width={50}
                   height={50}
                   alt={name?.common}
-                  className="rounded-md my-3"
+                  className="rounded-md my-3 h-[50px] w-[50px] object-fill"
                 />
               </td>
 
@@ -72,7 +78,12 @@ function Board({ searchTerm }: any) {
               <td>{area}</td>
               <td>{region}</td>
             </tr>
-          ))}
+          ))
+        ) : (
+          <tr>
+            <td>Any results</td>
+          </tr>
+        )}
       </tbody>
     </table>
   );

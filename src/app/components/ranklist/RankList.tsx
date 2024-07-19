@@ -7,9 +7,11 @@ import Board from "@/app/components/board/Board";
 import { fetcher } from "@/app/components/board/Board";
 import useSWR from "swr";
 
-const ENDPOINT_ALL_COUNTRIES: string = "https://restcountries.com/v3.1/all";
 function RankList() {
-  const { data } = useSWR(ENDPOINT_ALL_COUNTRIES, fetcher);
+  const [endpoint, setEndpoint] = React.useState<string | null>(
+    "https://restcountries.com/v3.1/all",
+  );
+  const { data } = useSWR(endpoint, fetcher);
   const [searchTerm, setSearchTerm]: string | any = React.useState("");
   console.log(searchTerm);
   return (
@@ -25,7 +27,7 @@ function RankList() {
       </div>
       <div className="flex items-start overflow-y-scroll">
         <SideFilter></SideFilter>
-        <Board searchTerm={searchTerm}></Board>
+        <Board searchTerm={searchTerm} setEndpoint={setEndpoint}></Board>
       </div>
     </div>
   );
