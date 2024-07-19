@@ -69,10 +69,10 @@ function Board({ searchTerm, setEndpoint }: any) {
               <td>
                 <Image
                   src={flags?.svg}
-                  width={50}
-                  height={50}
+                  width={0}
+                  height={0}
                   alt={name?.common}
-                  className="rounded-md my-3 h-[50px] w-[50px] object-fill"
+                  className="rounded-md my-3 h-[50px] w-[50px] object-contain"
                 />
               </td>
 
