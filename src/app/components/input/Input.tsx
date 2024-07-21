@@ -11,10 +11,6 @@ function Input({ searchTerm, setSearchTerm }: string | any) {
     if (event.key === "Enter") {
       setSearchTerm(event.target.value);
       setSearchHistory(event.target.value);
-
-      if (event.target.value.length === 0) {
-        console.log("c 0");
-      }
     }
   };
   return (

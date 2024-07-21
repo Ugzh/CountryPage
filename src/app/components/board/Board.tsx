@@ -13,7 +13,7 @@ export const fetcher = async (url: string) => {
 
 function Board({ searchTerm, setEndpoint, optionValue }: any) {
   // Permet de changer aux requêtes
-
+  console.log(searchTerm);
   const [endpointBoard, setEndpointBoard] = React.useState<string | null>(
     "https://restcountries.com/v3.1/all",
   );
