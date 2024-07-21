@@ -1,9 +1,9 @@
 "use client";
 
-import { DATA_REGION } from "@/data";
+import { DATA_REGION, SELECT_OPTION } from "@/data";
 import React from "react";
 
-function SideFilter() {
+function SideFilter({ setOptionValue, optionValue }: any) {
   return (
     <div className="flex ">
       <form className="flex flex-col gap-2 px-5 w-1/">
@@ -12,20 +12,23 @@ function SideFilter() {
         </label>
         <select
           id="sort-by"
+          value={optionValue}
           className="w-full px-2 py-2 bg-transparent border rounded-lg border-[#282B30]  text-sm text-[#D2D5DA]"
+          onChange={(event) => {
+            setOptionValue(event.target.value);
+          }}
         >
-          <option
-            value="population"
-            className="text-[#D2D5DA] bg-[#1B1D1F] border-[#282B30]"
-          >
-            Population
-          </option>
-          <option
-            value="area"
-            className="text-[#D2D5DA] bg-[#1B1D1F]  border-[#282B30]"
-          >
-            Area
-          </option>
+          {SELECT_OPTION.map((selectOption) => {
+            return (
+              <option
+                key={`${selectOption}-${Math.random()}`}
+                value={selectOption}
+                className="text-[#D2D5DA] bg-[#1B1D1F] border-[#282B30]"
+              >
+                {selectOption}
+              </option>
+            );
+          })}
         </select>
         <fieldset className="text-xs text-[#6C727F] mt-6">
           <legend>Region</legend>{" "}

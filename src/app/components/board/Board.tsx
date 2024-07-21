@@ -3,6 +3,7 @@
 import useSWR from "swr";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const fetcher = async (url: string) => {
   const response = await fetch(url);
@@ -10,7 +11,7 @@ export const fetcher = async (url: string) => {
   return json;
 };
 
-function Board({ searchTerm, setEndpoint }: any) {
+function Board({ searchTerm, setEndpoint, optionValue }: any) {
   // Permet de changer aux requêtes
   const [endpointBoard, setEndpointBoard] = React.useState<string | null>(
     "https://restcountries.com/v3.1/all",
@@ -20,6 +21,10 @@ function Board({ searchTerm, setEndpoint }: any) {
   // Permet de trier selon le plus peuplé
   const sortDataByPopulation = (data: any[]) => {
     return data?.sort((a, b) => b.population - a.population);
+  };
+  // Permet de trier selon le plus grand
+  const sortDataByArea = (data: any[]) => {
+    return data?.sort((a, b) => b.area - a.area);
   };
 
   const [mostPopulated, setMostPopulated] = React.useState(
@@ -42,14 +47,18 @@ function Board({ searchTerm, setEndpoint }: any) {
             const response = await fetch(endpoints[i]);
             const data = await response.json();
             if (data.status !== 404) {
-              console.log(endpoints[i]);
-              setEndpoint(endpoints[i]);
-              const sortedPopulation = sortDataByPopulation(data);
-
-              return (
-                setMostPopulated(sortedPopulation),
-                setEndpointBoard(endpoints[i])
-              );
+              if (optionValue === "Area") {
+                const sortedArea = sortDataByArea(data);
+                return (
+                  setMostPopulated(sortedArea), setEndpointBoard(endpoints[i])
+                );
+              } else if (optionValue === "Population") {
+                const sortedPopulation = sortDataByPopulation(data);
+                return (
+                  setMostPopulated(sortedPopulation),
+                  setEndpointBoard(endpoints[i])
+                );
+              }
             }
           } catch (error) {
             console.error(`Failed to fetch from ${endpoints}`, error);
@@ -63,7 +72,7 @@ function Board({ searchTerm, setEndpoint }: any) {
       setEndpoint("https://restcountries.com/v3.1/all");
       setEndpointBoard("https://restcountries.com/v3.1/all");
     }
-  }, [searchTerm, setEndpoint]);
+  }, [searchTerm, setEndpoint, optionValue]);
 
   return (
     <table className="w-full">
@@ -77,30 +86,45 @@ function Board({ searchTerm, setEndpoint }: any) {
         </tr>
       </thead>
       <tbody className="text-[#D2D5DA]">
-        {Array.isArray(data) ? (
-          data?.map(({ flags, name, population, area, region }: any) => (
-            <tr key={Math.random()}>
-              <td>
-                <Image
-                  src={flags?.svg}
-                  width={0}
-                  height={0}
-                  alt={name?.common}
-                  className="rounded-md my-3 h-[50px] w-[50px] object-contain"
-                />
-              </td>
+        {mostPopulated === undefined
+          ? data?.map(({ flags, name, population, area, region }: any) => (
+              <tr key={Math.random()}>
+                <td>
+                  <Image
+                    src={flags?.svg}
+                    width={0}
+                    height={0}
+                    alt={name?.common}
+                    className="rounded-md my-3 h-[50px] w-[50px] object-contain"
+                  />
+                </td>
 
-              <td>{name?.common}</td>
-              <td>{population}</td>
-              <td>{area}</td>
-              <td>{region}</td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td>Any results</td>
-          </tr>
-        )}
+                <td>{name?.common}</td>
+                <td>{population}</td>
+                <td>{area}</td>
+                <td>{region}</td>
+              </tr>
+            ))
+          : mostPopulated?.map(
+              ({ flags, name, population, area, region }: any) => (
+                <tr key={Math.random()}>
+                  <td>
+                    <Image
+                      src={flags?.svg}
+                      width={0}
+                      height={0}
+                      alt={name?.common}
+                      className="rounded-md my-3 h-[50px] w-[50px] object-contain"
+                    />
+                  </td>
+
+                  <td>{name?.common}</td>
+                  <td>{population}</td>
+                  <td>{area}</td>
+                  <td>{region}</td>
+                </tr>
+              ),
+            )}
       </tbody>
     </table>
   );

@@ -6,3 +6,5 @@ export const DATA_REGION = [
   "Europe",
   "Oceania",
 ];
+
+export const SELECT_OPTION = ["Population", "Area"];
