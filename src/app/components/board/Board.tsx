@@ -11,8 +11,19 @@ export const fetcher = async (url: string) => {
 };
 
 function Board({ searchTerm, setEndpoint }: any) {
+  // Permet de changer aux requêtes
   const [endpointBoard, setEndpointBoard] = React.useState<string | null>(
     "https://restcountries.com/v3.1/all",
+  );
+  const { data } = useSWR(endpointBoard, fetcher);
+
+  // Permet de trier selon le plus peuplé
+  const sortDataByPopulation = (data: any[]) => {
+    return data?.sort((a, b) => b.population - a.population);
+  };
+
+  const [mostPopulated, setMostPopulated] = React.useState(
+    sortDataByPopulation(data),
   );
 
   React.useEffect(() => {
@@ -33,7 +44,12 @@ function Board({ searchTerm, setEndpoint }: any) {
             if (data.status !== 404) {
               console.log(endpoints[i]);
               setEndpoint(endpoints[i]);
-              return setEndpointBoard(endpoints[i]);
+              const sortedPopulation = sortDataByPopulation(data);
+
+              return (
+                setMostPopulated(sortedPopulation),
+                setEndpointBoard(endpoints[i])
+              );
             }
           } catch (error) {
             console.error(`Failed to fetch from ${endpoints}`, error);
@@ -49,8 +65,6 @@ function Board({ searchTerm, setEndpoint }: any) {
     }
   }, [searchTerm, setEndpoint]);
 
-  const { data } = useSWR(endpointBoard, fetcher);
-
   return (
     <table className="w-full">
       <thead>
@@ -64,7 +78,7 @@ function Board({ searchTerm, setEndpoint }: any) {
       </thead>
       <tbody className="text-[#D2D5DA]">
         {Array.isArray(data) ? (
-          data.map(({ flags, name, population, area, region }: any) => (
+          data?.map(({ flags, name, population, area, region }: any) => (
             <tr key={Math.random()}>
               <td>
                 <Image
