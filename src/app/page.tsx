@@ -3,7 +3,7 @@ import RankList from "@/app/components/ranklist/RankList";
 
 export default function Home() {
   return (
-    <div className="bg-[#1B1D1F] h-screen flex flex-col items-center w-full">
+    <div className="bg-[#1B1D1F] h-screen flex flex-col items-center w-full pb-24">
       <Header></Header>
       <RankList></RankList>
     </div>

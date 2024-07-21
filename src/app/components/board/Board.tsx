@@ -74,6 +74,7 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
     } else if (searchTerm.length === 0) {
       setEndpoint("https://restcountries.com/v3.1/all");
       setEndpointBoard("https://restcountries.com/v3.1/all");
+      setMostPopulated(data);
     }
   }, [searchTerm, setEndpoint, optionValue]);
 
@@ -93,25 +94,7 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
           ? data?.map(({ flags, name, population, area, region }: any) => (
               <tr key={Math.random()}>
                 <td>
-                  <Image
-                    src={flags?.svg}
-                    width={0}
-                    height={0}
-                    alt={name?.common}
-                    className="rounded-md my-3 h-[50px] w-[50px] object-contain"
-                  />
-                </td>
-
-                <td>{name?.common}</td>
-                <td>{population}</td>
-                <td>{area}</td>
-                <td>{region}</td>
-              </tr>
-            ))
-          : mostPopulated?.map(
-              ({ flags, name, population, area, region }: any) => (
-                <tr key={Math.random()}>
-                  <td>
+                  <Link href={`/countries/${name?.common}`}>
                     <Image
                       src={flags?.svg}
                       width={0}
@@ -119,12 +102,54 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
                       alt={name?.common}
                       className="rounded-md my-3 h-[50px] w-[50px] object-contain"
                     />
+                  </Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>
+                    {name?.common}
+                  </Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>{population}</Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>{area}</Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>{region}</Link>
+                </td>
+              </tr>
+            ))
+          : mostPopulated?.map(
+              ({ flags, name, population, area, region }: any) => (
+                <tr key={Math.random()}>
+                  <td>
+                    <Link href={`/countries/${name?.common}`}>
+                      <Image
+                        src={flags?.svg}
+                        width={0}
+                        height={0}
+                        alt={name?.common}
+                        className="rounded-md my-3 h-[50px] w-[50px] object-contain"
+                      />
+                    </Link>
                   </td>
-
-                  <td>{name?.common}</td>
-                  <td>{population}</td>
-                  <td>{area}</td>
-                  <td>{region}</td>
+                  <td>
+                    <Link href={`/countries/${name?.common}`}>
+                      {name?.common}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link href={`/countries/${name?.common}`}>
+                      {population}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link href={`/countries/${name?.common}`}>{area}</Link>
+                  </td>
+                  <td>
+                    <Link href={`/countries/${name?.common}`}>{region}</Link>
+                  </td>
                 </tr>
               ),
             )}
