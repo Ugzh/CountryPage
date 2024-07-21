@@ -5,9 +5,16 @@ import SearchLoop from "@/app/assets/img/Search.svg";
 import Image from "next/image";
 
 function Input({ searchTerm, setSearchTerm }: string | any) {
+  const [searchHistory, setSearchHistory] = React.useState<string>("");
+
   const handleKeyPress = (event: any) => {
     if (event.key === "Enter") {
       setSearchTerm(event.target.value);
+      setSearchHistory(event.target.value);
+
+      if (event.target.value.length === 0) {
+        console.log("c 0");
+      }
     }
   };
   return (

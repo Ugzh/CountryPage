@@ -13,6 +13,7 @@ export const fetcher = async (url: string) => {
 
 function Board({ searchTerm, setEndpoint, optionValue }: any) {
   // Permet de changer aux requêtes
+
   const [endpointBoard, setEndpointBoard] = React.useState<string | null>(
     "https://restcountries.com/v3.1/all",
   );
@@ -27,7 +28,7 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
     return data?.sort((a, b) => b.area - a.area);
   };
 
-  const [mostPopulated, setMostPopulated] = React.useState(
+  const [sortBy, setSortBy] = React.useState<any | undefined>(
     sortDataByPopulation(data),
   );
 
@@ -50,14 +51,14 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
               if (optionValue === "Area") {
                 const sortedArea = sortDataByArea(data);
                 return (
-                  setMostPopulated(sortedArea),
+                  setSortBy(sortedArea),
                   setEndpointBoard(endpoints[i]),
                   setEndpoint(endpoints[i])
                 );
               } else if (optionValue === "Population") {
                 const sortedPopulation = sortDataByPopulation(data);
                 return (
-                  setMostPopulated(sortedPopulation),
+                  setSortBy(sortedPopulation),
                   setEndpointBoard(endpoints[i]),
                   setEndpoint(endpoints[i])
                 );
@@ -72,9 +73,9 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
 
       fetchData();
     } else if (searchTerm.length === 0) {
+      setSortBy(undefined);
       setEndpoint("https://restcountries.com/v3.1/all");
       setEndpointBoard("https://restcountries.com/v3.1/all");
-      setMostPopulated(data);
     }
   }, [searchTerm, setEndpoint, optionValue]);
 
@@ -90,7 +91,7 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
         </tr>
       </thead>
       <tbody className="text-[#D2D5DA]">
-        {mostPopulated === undefined
+        {sortBy === undefined
           ? data?.map(({ flags, name, population, area, region }: any) => (
               <tr key={Math.random()}>
                 <td>
@@ -120,39 +121,35 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
                 </td>
               </tr>
             ))
-          : mostPopulated?.map(
-              ({ flags, name, population, area, region }: any) => (
-                <tr key={Math.random()}>
-                  <td>
-                    <Link href={`/countries/${name?.common}`}>
-                      <Image
-                        src={flags?.svg}
-                        width={0}
-                        height={0}
-                        alt={name?.common}
-                        className="rounded-md my-3 h-[50px] w-[50px] object-contain"
-                      />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link href={`/countries/${name?.common}`}>
-                      {name?.common}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link href={`/countries/${name?.common}`}>
-                      {population}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link href={`/countries/${name?.common}`}>{area}</Link>
-                  </td>
-                  <td>
-                    <Link href={`/countries/${name?.common}`}>{region}</Link>
-                  </td>
-                </tr>
-              ),
-            )}
+          : sortBy?.map(({ flags, name, population, area, region }: any) => (
+              <tr key={Math.random()}>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>
+                    <Image
+                      src={flags?.svg}
+                      width={0}
+                      height={0}
+                      alt={name?.common}
+                      className="rounded-md my-3 h-[50px] w-[50px] object-contain"
+                    />
+                  </Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>
+                    {name?.common}
+                  </Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>{population}</Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>{area}</Link>
+                </td>
+                <td>
+                  <Link href={`/countries/${name?.common}`}>{region}</Link>
+                </td>
+              </tr>
+            ))}
       </tbody>
     </table>
   );
