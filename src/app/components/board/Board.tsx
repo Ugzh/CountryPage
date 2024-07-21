@@ -50,13 +50,16 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
               if (optionValue === "Area") {
                 const sortedArea = sortDataByArea(data);
                 return (
-                  setMostPopulated(sortedArea), setEndpointBoard(endpoints[i])
+                  setMostPopulated(sortedArea),
+                  setEndpointBoard(endpoints[i]),
+                  setEndpoint(endpoints[i])
                 );
               } else if (optionValue === "Population") {
                 const sortedPopulation = sortDataByPopulation(data);
                 return (
                   setMostPopulated(sortedPopulation),
-                  setEndpointBoard(endpoints[i])
+                  setEndpointBoard(endpoints[i]),
+                  setEndpoint(endpoints[i])
                 );
               }
             }
