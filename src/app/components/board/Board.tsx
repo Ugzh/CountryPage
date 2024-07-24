@@ -13,7 +13,6 @@ export const fetcher = async (url: string) => {
 
 function Board({ searchTerm, setEndpoint, optionValue }: any) {
   // Permet de changer aux requêtes
-  console.log(searchTerm);
   const [endpointBoard, setEndpointBoard] = React.useState<string | null>(
     "https://restcountries.com/v3.1/all",
   );
@@ -79,6 +78,7 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
     }
   }, [searchTerm, setEndpoint, optionValue]);
 
+  console.log(typeof sortBy);
   return (
     <table className="w-full">
       <thead>
@@ -91,7 +91,7 @@ function Board({ searchTerm, setEndpoint, optionValue }: any) {
         </tr>
       </thead>
       <tbody className="text-[#D2D5DA]">
-        {sortBy === undefined
+        {sortBy === undefined || sortBy
           ? data?.map(({ flags, name, population, area, region }: any) => (
               <tr key={Math.random()}>
                 <td>

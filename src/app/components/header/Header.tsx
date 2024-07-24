@@ -4,8 +4,13 @@ import Logo from "@/app/assets/img/Logo.svg";
 import Link from "next/link";
 function Header() {
   return (
-    <div className="w-full relative">
-      <Image src={SpaceBg} alt="Background space" className="w-full" />
+    <div className="w-full relative h-1/3">
+      <Image
+        src={SpaceBg}
+        alt="Background space"
+        height={200}
+        className="w-full "
+      />
       <Link href="/">
         <Image
           src={Logo}
